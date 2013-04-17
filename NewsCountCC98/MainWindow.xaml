@@ -3,6 +3,11 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="MainWindow" Height="350" Width="525">
     <Grid>
-        
+        <TextBox x:Name="DebugInfo" HorizontalAlignment="Left" Height="41" Margin="55,34,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="309" TextChanged="TextBox_TextChanged_1"/>
+        <Button x:Name="start" Content="Button" HorizontalAlignment="Left" Margin="432,38,0,0" VerticalAlignment="Top" Width="75" Click="start_Click"/>
+        <TextBox x:Name="QueryID" HorizontalAlignment="Left" Height="23" Margin="55,97,0,0" TextWrapping="Wrap" Text="id" VerticalAlignment="Top" Width="120"/>
+        <TextBox x:Name="QueryYear" HorizontalAlignment="Left" Height="23" Margin="55,137,0,0" TextWrapping="Wrap" Text="year" VerticalAlignment="Top" Width="120"/>
+        <TextBox x:Name="QueryMonth" HorizontalAlignment="Left" Height="23" Margin="55,179,0,0" TextWrapping="Wrap" Text="month" VerticalAlignment="Top" Width="120"/>
+
     </Grid>
 </Window>
