@@ -23,6 +23,9 @@ namespace NewsCountCC98
     public partial class MainWindow : Window
     {
         string cookiestr = null;
+        
+        List<string> idList=new List<string>();
+        List<int> countList=new List<int>();
         public MainWindow()
         {
             InitializeComponent();
@@ -37,25 +40,97 @@ namespace NewsCountCC98
 
         private void start_Click(object sender, RoutedEventArgs e)
         {
-            DebugInfo.Text="start";
+            
+            
+            
             //Uri requestUri = new Uri("http://www.cc98.org/list.asp?boardid=357");
-            cookiestr="ASPSESSIONIDCASBAQDA=DHLCBHKBHOOKALCJMJEJOLLF; ASPSESSIONIDCCTDDSBA=OOKLPCHCEFJOEOBEICKEPEEJ; aspsky=username=%E7%BA%AF%E8%89%AF&usercookies=3&userid=335099&useranony=&userhidden=2&password=5ba3a42ac9cb3dc5; upNum=0; cc98Simple=1; BoardList=BoardID=Show";
+            cookiestr=QueryCookie.Text;
+
+
+ 
+            scanForPage();
+            MessageBox.Show("统计已经完成，准备写入文件");
+            writeResult();
+            MessageBox.Show("请查看result.txt");
+            //DebugInfo.Text = getIDNewsCount(QueryID.Text);
+        }
+        private void writeResult()
+        {
+            FileStream fs = File.Create("result.txt");
+            int count = idList.Count();
+            for (int i = 0; i < count; i++)
+            {
+                AddText(fs, idList.ElementAt(i)+"                   ");
+                AddText(fs, countList.ElementAt(i) + "\r\n");
+            }
+            fs.Close();
             
-            ////DebugInfo.Text = getNewsCount("纯良","30","1");
-            //DateTime QueryTimeStart = new DateTime(int.Parse(QueryYear.Text),int.Parse(QueryMonth.Text),1).AddDays(-1);
-            //DateTime QueryTimeEnd = new DateTime(int.Parse(QueryYear.Text), int.Parse(QueryMonth.Text)+1, 1);
-            //QueryTimeEnd = QueryTimeEnd.AddDays(-1);
-            //DateTime NowTime=System.DateTime.Now;
-            //TimeSpan time_difference_start=NowTime.Subtract(QueryTimeStart);
-            //TimeSpan time_difference_end = NowTime.Subtract(QueryTimeEnd);
-
-            
-
-
-            DebugInfo.Text = getIDNewsCount(QueryID.Text);
         }
 
-        private string getIDNewsCount(String id)
+        private static void AddText(FileStream fs, string value)
+        {
+            byte[] info = new UTF8Encoding(true).GetBytes(value);
+            fs.Write(info, 0, info.Length);
+        }
+
+
+        private void scanForPage()
+        {
+            int i = 0;
+            bool flag=false;
+            string response = "";
+            while (!flag)
+            {
+                i++;
+                response = getWebContent(new Uri("http://www.cc98.org/list.asp?boardid=357&page=" + i.ToString()));
+                flag = isPageNeeded(response);
+                //process.Text="正在确认第"+i+"页";
+            }
+            
+            while (flag){
+                i++;
+                //process.Text = ("正在统计第" + i + "页");
+                
+                perPageCount(response);                
+                response = getWebContent(new Uri("http://www.cc98.org/list.asp?boardid=357&page="+i.ToString()));
+                flag = isPageNeeded(response);
+                //process.Text = ("正在确认第" + i + "页");
+            }
+        }
+
+        private void perPageCount(string response)
+        {
+            
+            int start = response.IndexOf("<!-- 显示作者 -->");
+            int end = response.LastIndexOf("<!-- 最后回复时间和作者 -->");
+            response = response.Substring(start, end - start);
+            string id = "";
+            for (int i = 0; i < 20; i++)
+            {
+                start = response.IndexOf("target=\"_blank\">");
+                response = response.Substring(start + 16);
+                end = response.IndexOf("</a>");
+                id = response.Substring(0, end);
+                if (idList.IndexOf(id) == -1)
+                {
+                    idList.Add(id);
+                    countList.Add(getIDNewsCount(id));
+                }
+            }  
+
+        }
+
+        private Boolean isPageNeeded(string response)
+        {
+            Boolean result=false;
+
+            if (response.IndexOf(">" + QueryMonth.Text + "/") != -1)
+                result = true;
+
+            return result;
+        }
+
+        private int getIDNewsCount(String id)
         {
             DateTime QueryTimeStart = new DateTime(int.Parse(QueryYear.Text), int.Parse(QueryMonth.Text), 1).AddDays(-1);
             DateTime QueryTimeEnd = new DateTime(int.Parse(QueryYear.Text), int.Parse(QueryMonth.Text) + 1, 1);
@@ -64,7 +139,7 @@ namespace NewsCountCC98
             TimeSpan time_difference_start = NowTime.Subtract(QueryTimeStart);
             TimeSpan time_difference_end = NowTime.Subtract(QueryTimeEnd);
 
-            return getNewsCount(QueryID.Text, time_difference_start.Days.ToString(), time_difference_end.Days.ToString());
+            return getNewsCount(id, time_difference_start.Days.ToString(), time_difference_end.Days.ToString());
         }
         private string getWebContent(Uri requestUri)
         {
@@ -84,10 +159,10 @@ namespace NewsCountCC98
             return strResult;
         }
 
-        private string getNewsCount(String id, String start, String end)
+        private int getNewsCount(String id, String start, String end)
         {
-            String result =null;
-            result = (int.Parse(getSearchCount(id, start))-int.Parse(getSearchCount(id,end))).ToString();
+            int result;
+            result = int.Parse(getSearchCount(id, start))-int.Parse(getSearchCount(id,end));
             return result;
         }
 

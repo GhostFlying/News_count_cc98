@@ -3,11 +3,13 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="MainWindow" Height="350" Width="525">
     <Grid>
-        <TextBox x:Name="DebugInfo" HorizontalAlignment="Left" Height="41" Margin="55,34,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="309" TextChanged="TextBox_TextChanged_1"/>
-        <Button x:Name="start" Content="Button" HorizontalAlignment="Left" Margin="432,38,0,0" VerticalAlignment="Top" Width="75" Click="start_Click"/>
-        <TextBox x:Name="QueryID" HorizontalAlignment="Left" Height="23" Margin="55,97,0,0" TextWrapping="Wrap" Text="id" VerticalAlignment="Top" Width="120"/>
-        <TextBox x:Name="QueryYear" HorizontalAlignment="Left" Height="23" Margin="55,137,0,0" TextWrapping="Wrap" Text="year" VerticalAlignment="Top" Width="120"/>
-        <TextBox x:Name="QueryMonth" HorizontalAlignment="Left" Height="23" Margin="55,179,0,0" TextWrapping="Wrap" Text="month" VerticalAlignment="Top" Width="120"/>
+        <Button x:Name="start" Content="开始" HorizontalAlignment="Left" Margin="378,186,0,0" VerticalAlignment="Top" Width="75" Click="start_Click"/>
+        <TextBox x:Name="QueryCookie" HorizontalAlignment="Left" Height="37" Margin="169,70,0,0" TextWrapping="Wrap" Text="cookie" VerticalAlignment="Top" Width="306"/>
+        <TextBox x:Name="QueryYear" HorizontalAlignment="Left" Height="23" Margin="169,140,0,0" TextWrapping="Wrap" Text="year" VerticalAlignment="Top" Width="120"/>
+        <TextBox x:Name="QueryMonth" HorizontalAlignment="Left" Height="23" Margin="169,182,0,0" TextWrapping="Wrap" Text="month" VerticalAlignment="Top" Width="120"/>
+        <TextBlock HorizontalAlignment="Left" Margin="78,141,0,0" TextWrapping="Wrap" VerticalAlignment="Top"><Run Language="zh-cn" Text="统计年份"/></TextBlock>
+        <TextBlock HorizontalAlignment="Left" Margin="78,190,0,0" TextWrapping="Wrap" VerticalAlignment="Top"><Run Language="zh-cn" Text="统计月份"/></TextBlock>
+        <TextBlock HorizontalAlignment="Left" Margin="70,58,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="65" Width="56"><Run Language="zh-cn" Text="请输入有"/><LineBreak/><Run Language="zh-cn" Text="效已登录"/><LineBreak/><Run Language="zh-cn" Text="simple版"/><LineBreak/><Run Language="zh-cn" Text="Cookie"/></TextBlock>
 
     </Grid>
 </Window>
