@@ -76,7 +76,7 @@ namespace NewsCountCC98
 
         private void scanForPage()
         {
-            int i = 0;
+            int i = 1;
             bool flag=false;
             string response = "";
             while (!flag)
