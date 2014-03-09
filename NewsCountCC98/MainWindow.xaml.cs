@@ -124,7 +124,7 @@ namespace NewsCountCC98
         {
             Boolean result=false;
 
-            if (response.IndexOf(">" + QueryMonth.Text + "/") != -1)
+            if (response.IndexOf(">"+ QueryYear.Text + "/" + QueryMonth.Text + "/") != -1)
                 result = true;
 
             return result;
@@ -133,7 +133,14 @@ namespace NewsCountCC98
         private int getIDNewsCount(String id)
         {
             DateTime QueryTimeStart = new DateTime(int.Parse(QueryYear.Text), int.Parse(QueryMonth.Text), 1).AddDays(-1);
-            DateTime QueryTimeEnd = new DateTime(int.Parse(QueryYear.Text), int.Parse(QueryMonth.Text) + 1, 1);
+            DateTime QueryTimeEnd;
+            if (QueryMonth.Text == "12")
+            {
+                QueryTimeEnd = new DateTime(int.Parse(QueryYear.Text) + 1, 1, 1);
+            }
+            else {
+                QueryTimeEnd = new DateTime(int.Parse(QueryYear.Text), int.Parse(QueryMonth.Text) + 1, 1);
+            }            
             QueryTimeEnd = QueryTimeEnd.AddDays(-1);
             DateTime NowTime = System.DateTime.Now;
             TimeSpan time_difference_start = NowTime.Subtract(QueryTimeStart);
